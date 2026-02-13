@@ -221,6 +221,11 @@ details summary:hover {
   font-size: inherit;
   line-height: inherit;
 }
+.transcript.scrollable {
+  max-height: 60vh;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}
 .hidden {
   display: none !important;
 }
@@ -5435,6 +5440,14 @@ function loadVideo(el, ytId) {
     + ' referrerpolicy="strict-origin-when-cross-origin"'
     + ' allowfullscreen></iframe>';
   el.replaceWith(container);
+  // Auto-expand transcript and make it scrollable
+  const section = container.closest('.video-section');
+  if (section) {
+    const details = section.querySelector('details');
+    const transcript = section.querySelector('.transcript');
+    if (details) details.open = true;
+    if (transcript) transcript.classList.add('scrollable');
+  }
 }
 
 // Dark mode toggle
