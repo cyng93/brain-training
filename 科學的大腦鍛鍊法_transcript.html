@@ -5556,6 +5556,8 @@ const SIZES = [
 ];
 let currentSizeIdx = parseInt(localStorage.getItem('fontSizeIdx') || '2');
 let eyeFriendly = localStorage.getItem('eyeFriendly') === 'true';
+let preEyeTheme = localStorage.getItem('preEyeTheme') || 'light';
+let preEyeSizeIdx = parseInt(localStorage.getItem('preEyeSizeIdx') || '2');
 
 function applyFontSize() {
   const s = SIZES[currentSizeIdx];
@@ -5580,6 +5582,11 @@ function toggleEyeFriendly() {
 function applyEyeFriendly() {
   const btn = document.getElementById('eye-btn');
   if (eyeFriendly) {
+    // Save current state before switching
+    preEyeTheme = document.documentElement.getAttribute('data-theme') || 'light';
+    preEyeSizeIdx = currentSizeIdx;
+    localStorage.setItem('preEyeTheme', preEyeTheme);
+    localStorage.setItem('preEyeSizeIdx', preEyeSizeIdx);
     // Jump to at least L size
     if (currentSizeIdx < 3) currentSizeIdx = 3;
     applyFontSize();
@@ -5589,6 +5596,15 @@ function applyEyeFriendly() {
     btn.textContent = '👁 護眼開啟';
     btn.classList.add('active');
   } else {
+    // Restore previous theme
+    const restoreTheme = preEyeTheme || 'light';
+    document.documentElement.setAttribute('data-theme', restoreTheme);
+    document.getElementById('theme-btn').textContent =
+      restoreTheme === 'dark' ? '☀️ 淺色模式' : '🌙 深色模式';
+    localStorage.setItem('theme', restoreTheme);
+    // Restore previous font size
+    currentSizeIdx = preEyeSizeIdx;
+    applyFontSize();
     btn.textContent = '👁 護眼模式';
     btn.classList.remove('active');
   }
