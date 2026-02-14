@@ -1,0 +1,5 @@
+# Course video files (large, not distributable)
+src/inputs/
+
+# Intermediate OCR frames (~15K images, ~1.1GB)
+src/subtitle_frames_for_ocr/
